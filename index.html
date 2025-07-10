@@ -6,7 +6,6 @@
   <title>Live‑Chat Overlay</title>
 
   <style>
-
     html, body {
       height: 100%;
       margin: 0;
@@ -33,13 +32,6 @@
       border-radius: 18px;
       background: rgba(13, 17, 23, 0.8); 
       box-sizing: border-box;
-    }
-
-    #avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
     }
 
     #username {
@@ -108,11 +100,8 @@
 </head>
 <body>
   <div id="overlay">
-    <img id="avatar" src="" alt="avatar">
-    <div id="content">
-      <div id="username"><span id="username-text"></span></div>
-      <div id="comment"></div>
-    </div>
+    <div id="username"><span id="username-text"></span></div>
+    <div id="comment"></div>
   </div>
 
   <div id="right-text">
@@ -128,7 +117,6 @@
     Better<br>
     Chance
   </div>
-
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -147,18 +135,15 @@
     const db = firebase.database();
     const overlay = document.getElementById('overlay'),
           usernameText = document.getElementById('username-text'),
-          commentEl = document.getElementById('comment'),
+          commentEl = document.getElementById('comment');
 
-
-    function paintUsername(name='Anonymous') {
+    function paintUsername(name = 'Anonymous') {
       usernameText.textContent = name;
     }
 
-
-    function paintComment(txt='') {
-      commentEl.textContent = txt; 
-
-
+    function paintComment(txt = '') {
+      commentEl.textContent = txt;
+    }
 
     function render(d) {
       if (!d || !d.text) {
@@ -173,3 +158,4 @@
   </script>
 </body>
 </html>
+
