@@ -3,17 +3,9 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Live‑Chat Overlay (synced bg)</title>
+  <title>Live‑Chat Overlay</title>
 
   <style>
-    @font-face {
-      font-family: 'Moonshine';
-      src: url('https://fonts.gstatic.com/s/moonshiner/v1/abcdefg.woff2') format('woff2'); /* Replace with actual URL */
-      font-weight: bold;
-      font-style: normal;
-    }
-
-    :root { --cycle-duration: 10s; }
 
     html, body {
       height: 100%;
@@ -39,7 +31,7 @@
       width: 360px;
       height: 100%;
       border-radius: 18px;
-      background: rgba(13, 17, 23, 0.8); /* Semi-transparent background */
+      background: rgba(13, 17, 23, 0.8); 
       box-sizing: border-box;
     }
 
@@ -55,7 +47,7 @@
       font-size: 1.6em;
       text-align: center;
       margin: 8px 0;
-      color: #FFA500; /* Orange color */
+      color: #FFA500;
     }
 
     #comment {
@@ -68,7 +60,7 @@
       overflow: hidden;
       word-break: break-word;
       margin-top: 8px;
-      color: #FFFFFF; /* White text */
+      color: #FFFFFF;
     }
 
     @media (max-width: 480px) {
@@ -91,7 +83,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-family: Arial, Helvetica, sans-serif; /* Changed from Comic Sans */
+      font-family: Arial, Helvetica, sans-serif; 
       font-weight: bold;
       font-size: 2.3em;
       color: white;
@@ -137,8 +129,6 @@
     Chance
   </div>
 
-  <audio id="bg-music" src="hip-hop-drum-loop-ride-and-kick-beat-102-bpm-265596.mp3" loop preload="auto"></audio>
-  <audio id="ding-sound" src="ding-126626.mp3" preload="auto"></audio>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -156,62 +146,27 @@
 
     const db = firebase.database();
     const overlay = document.getElementById('overlay'),
-          avatar = document.getElementById('avatar'),
           usernameText = document.getElementById('username-text'),
           commentEl = document.getElementById('comment'),
-          bgMusic = document.getElementById('bg-music'),
-          dingSound = document.getElementById('ding-sound');
 
-    let emojiInterval = null;
-
-    function startEmojiCycle() {
-      // Removed emoji generation since no emojis are needed anymore
-    }
 
     function paintUsername(name='Anonymous') {
       usernameText.textContent = name;
     }
 
-    function fadeVolume(audio, from, to, duration = 800) {
-      const steps = 30;
-      const stepTime = duration / steps;
-      const delta = (to - from) / steps;
-      let current = 0;
-      const interval = setInterval(() => {
-        current++;
-        audio.volume = Math.min(1, Math.max(0, from + delta * current));
-        if (current >= steps) clearInterval(interval);
-      }, stepTime);
-    }
 
     function paintComment(txt='') {
-      commentEl.textContent = txt;  // No typing effect anymore
-      bgMusic.pause();
-      bgMusic.volume = 0;
-      dingSound.currentTime = 0;
-      dingSound.play().then(() => {
-        setTimeout(() => {
-          bgMusic.currentTime = 0;
-          bgMusic.play().catch(() => {});
-          fadeVolume(bgMusic, 0, 1.0, 1200);
-        }, 800);
-      }).catch(() => {});
-    }
+      commentEl.textContent = txt; 
 
-    function animAvatar() {
-      avatar.style.animation = `${Math.random() < 0.5 ? 'fadeA' : 'pulseA'} 10s ease-in-out infinite`;
-    }
+
 
     function render(d) {
       if (!d || !d.text) {
         overlay.style.opacity = 1;
         return;
       }
-      avatar.src = d.avatar_url || 'default-avatar.jpg';
       paintUsername(d.author);
       paintComment(d.text);
-      animAvatar();
-      startEmojiCycle();
     }
 
     db.ref('latestComment').on('value', snap => render(snap.val()));
